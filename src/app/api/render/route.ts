@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const CREATIFY_API_URL =
   process.env.CREATIFY_API_URL || "https://api.creatify.ai";
 
-export async function OPTIONS(request: NextRequest) {
+export async function OPTIONS() {
   return NextResponse.json(
     {},
     {
