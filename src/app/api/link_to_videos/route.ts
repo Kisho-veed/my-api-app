@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
           "X-API-KEY": "ec7aefc63c28104459ab60364e0e8fe5e3ef3d8d",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...object1, request_id: "request1" }),
+        body: JSON.stringify({ ...(object1 || {}), request_id: "request1" }),
       }),
       fetch(`${CREATIFY_API_URL}/link_to_videos/`, {
         method: "POST",
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
           "X-API-KEY": "ec7aefc63c28104459ab60364e0e8fe5e3ef3d8d",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...object2, request_id: "request2" }),
+        body: JSON.stringify({ ...(object2 || {}), request_id: "request2" }),
       }),
     ]);
 
