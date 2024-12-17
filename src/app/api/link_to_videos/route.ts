@@ -7,34 +7,44 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log(body, "body in settings");
 
-    // First request
-    const response1 = await fetch(`${CREATIFY_API_URL}/link_to_videos/`, {
-      method: "POST",
-      headers: {
-        "X-API-ID": "51ee7e6a-21f6-461f-b80b-dc2d8b4d2f05",
-        "X-API-KEY": "ec7aefc63c28104459ab60364e0e8fe5e3ef3d8d",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ ...body, request_id: "request1" }), // Add unique identifier
-    });
+    const objectsArray = Object.values(body);
 
-    // Second request
-    // const response2 = await fetch(`${CREATIFY_API_URL}/link_to_videos/`, {
-    //   method: "POST",
-    //   headers: {
-    //     "X-API-ID": "51ee7e6a-21f6-461f-b80b-dc2d8b4d2f05",
-    //     "X-API-KEY": "ec7aefc63c28104459ab60364e0e8fe5e3ef3d8d",
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify({ ...body, request_id: "request2" }), // Add unique identifier
-    // });
+    // Ensure there are at least two objects
 
-    // Get both responses
-    const responseData1 = await response1.json();
-    // const responseData2 = await response2.json();
+    const [object1, object2] = objectsArray;
+
+    console.log(object1, "first object");
+    console.log(object2, "second object");
+
+    const [response1, response2] = await Promise.all([
+      fetch(`${CREATIFY_API_URL}/link_to_videos/`, {
+        method: "POST",
+        headers: {
+          "X-API-ID": "51ee7e6a-21f6-461f-b80b-dc2d8b4d2f05",
+          "X-API-KEY": "ec7aefc63c28104459ab60364e0e8fe5e3ef3d8d",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...object1, request_id: "request1" }),
+      }),
+      fetch(`${CREATIFY_API_URL}/link_to_videos/`, {
+        method: "POST",
+        headers: {
+          "X-API-ID": "51ee7e6a-21f6-461f-b80b-dc2d8b4d2f05",
+          "X-API-KEY": "ec7aefc63c28104459ab60364e0e8fe5e3ef3d8d",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...object2, request_id: "request2" }),
+      }),
+    ]);
+
+    // Parse both responses
+    const [responseData1, responseData2] = await Promise.all([
+      response1.json(),
+      response2.json(),
+    ]);
 
     // Combine the responses
-    const combinedResponse = [responseData1];
+    const combinedResponse = [responseData1, responseData2];
 
     return NextResponse.json(combinedResponse, {
       headers: {
